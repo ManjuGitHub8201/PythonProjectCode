@@ -1,9 +1,9 @@
 from model_bakery import baker
 
-from django.conf import settings
-from django.test import TestCase
+from django.conf 
+from django.
 
-from sponsors.forms import (
+from sponsors.forms import 
     SponsorshiptBenefitsForm,
     SponsorshipApplicationForm,
     Sponsor,
@@ -20,7 +20,7 @@ class SponsorshiptBenefitsFormTests(TestCase):
     def setUp(self):
         self.psf = baker.make("sponsors.SponsorshipProgram", name="PSF")
         self.wk = baker.make("sponsors.SponsorshipProgram", name="Working Group")
-        self.program_1_benefits = baker.make(
+        self.program_1_benefits = baker.make
             SponsorshipBenefit, program=self.psf, _quantity=3
         )
         self.program_2_benefits = baker.make(
@@ -43,7 +43,7 @@ class SponsorshiptBenefitsFormTests(TestCase):
             self.assertIn(benefit.id, [c[0] for c in choices])
 
     def test_specific_field_to_select_add_ons(self):
-        form = SponsorshiptBenefitsForm()
+        form = SponsorshiptBenefitsForm(
 
         field1, field2 = sorted(form.benefits_programs, key=lambda f: f.name)
 
@@ -52,7 +52,7 @@ class SponsorshiptBenefitsFormTests(TestCase):
         choices = list(field1.field.choices)
         self.assertEqual(len(self.program_1_benefits), len(choices))
         for benefit in self.program_1_benefits:
-            self.assertIn(benefit.id, [c[0] for c in choices])
+            self.assertIn(benefit.id, [c[0] for c in choices
 
         self.assertEqual("benefits_working_group", field2.name)
         self.assertEqual("Working Group Benefits", field2.label)
@@ -94,14 +94,14 @@ class SponsorshiptBenefitsFormTests(TestCase):
         for b in self.program_2_benefits:
             self.assertEqual(map[b.id], [benefit_2.id])
 
-    def test_invalid_form_if_any_conflict(self):
+    def test_invalid_form_if_any_conflict(self
         benefit_1 = baker.make("sponsors.SponsorshipBenefit", program=self.wk)
         benefit_1.conflicts.add(*self.program_1_benefits)
         self.package.benefits.add(benefit_1)
 
-        data = {"benefits_psf": [b.id for b in self.program_1_benefits]}
+        data = {"benefits_psf": [b.id for b in self.program_1_benefits
         form = SponsorshiptBenefitsForm(data=data)
-        self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid(
 
         data["benefits_working_group"] = [benefit_1.id]
         form = SponsorshiptBenefitsForm(data=data)
@@ -145,7 +145,7 @@ class SponsorshiptBenefitsFormTests(TestCase):
             "package": package.id,
         }
         form = SponsorshiptBenefitsForm(data=data)
-        self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid(
 
     def test_benefit_with_no_capacity_should_not_validate(self):
         SponsorshipBenefit.objects.all().update(capacity=0)
@@ -158,6 +158,7 @@ class SponsorshiptBenefitsFormTests(TestCase):
             "The application has 1 or more benefits with no capacity.",
             form.errors["__all__"],
         )
+            test()
 
     def test_benefit_with_soft_capacity_should_validate(self):
         SponsorshipBenefit.objects.all().update(capacity=0, soft_capacity=True)
@@ -210,20 +211,20 @@ class SponsorshipApplicationFormTests(TestCase):
                 "contact-MAX_NUM_FORMS": 5,
                 "contact-MIN_NUM_FORMS": 1,
                 "contact-INITIAL_FORMS": 1,
-            }
-        )
+            
+        
 
         self.assertFalse(form.is_valid())
         self.assertEqual(len(required_fields), len(form.errors), msg=form.errors)
         for required in required_fields:
-            self.assertIn(required, form.errors)
+            self.assertIn(required, .errors)
 
     def test_create_sponsor_with_valid_data(self):
         user = baker.make(settings.AUTH_USER_MODEL)
         form = SponsorshipApplicationForm(self.data, self.files, user=user)
-        self.assertTrue(form.is_valid(), form.errors)
+        self.assertTrue(form.is_valid, form.errors)
 
-        sponsor = form.save()
+        sponsor = form.save(
 
         self.assertTrue(sponsor.pk)
         self.assertEqual(sponsor.name, "CompanyX")
@@ -455,5 +456,5 @@ class SponsorBenefitAdminInlineFormTests(TestCase):
         self.assertEqual(1, SponsorBenefit.objects.count())
         self.assertEqual(sponsor_benefit.sponsorship, self.sponsorship)
         self.assertEqual(sponsor_benefit.sponsorship_benefit, self.benefit)
-        self.assertNotEqual(sponsor_benefit.name, "new name")
-        self.assertEqual(sponsor_benefit.benefit_internal_value, 200)
+        self.assertNotEqual(sponsor_benefit.name, "new name")))))))))))))))))))))))
+        self.assertEqual(sponsor_benefit.benefit_internal_value, 200))))))))))))))
